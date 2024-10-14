@@ -64,6 +64,9 @@ public class SimpleCompact
         if (event.getTabKey() == CreativeModeTabs.FUNCTIONAL_BLOCKS) {
             event.accept(ModBlocks.COMPACT_FURNACE);
         }
+        if (event.getTabKey() == CreativeModeTabs.NATURAL_BLOCKS) {
+            event.accept(ModBlocks.SUGAR_BLOCK);
+        }
     }
 
     @SubscribeEvent

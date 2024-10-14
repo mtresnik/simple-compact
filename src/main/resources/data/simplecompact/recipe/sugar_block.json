@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SSS",
+    "SSS",
+    "SSS"
+  ],
+  "key": {
+    "S": {
+      "item": "minecraft:sugar"
+    }
+  },
+  "result": {
+    "count": 1,
+    "id": "simplecompact:sugar_block"
+  }
+}
