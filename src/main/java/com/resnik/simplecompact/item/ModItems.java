@@ -8,7 +8,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 public class ModItems {
 
-    public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(SimpleCompact.MODID);
+    public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(SimpleCompact.MOD_ID);
 
     public static final DeferredItem<Item> COMPACTING_GEM = ITEMS.register("compacting_gem",
             () -> new Item(new Item.Properties()));

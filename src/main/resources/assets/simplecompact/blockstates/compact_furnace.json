@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "simplecompact:block/compact_furnace"
+    }
+  }
+}

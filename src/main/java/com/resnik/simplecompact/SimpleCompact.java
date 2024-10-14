@@ -1,8 +1,12 @@
 package com.resnik.simplecompact;
 
+import com.resnik.simplecompact.block.ModBlocks;
+import com.resnik.simplecompact.entity.ModBlockEntities;
+import com.resnik.simplecompact.inventory.CompactFurnaceScreen;
+import com.resnik.simplecompact.inventory.ModMenuTypes;
 import com.resnik.simplecompact.item.ModItems;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -21,29 +25,25 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 
-// The value here should match an entry in the META-INF/neoforge.mods.toml file
-@Mod(SimpleCompact.MODID)
+@Mod(SimpleCompact.MOD_ID)
 public class SimpleCompact
 {
-    public static final String MODID = "simplecompact";
+    public static final String MOD_ID = "simplecompact";
     private static final Logger LOGGER = LogUtils.getLogger();
 
     public SimpleCompact(IEventBus modEventBus, ModContainer modContainer)
     {
-        // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
 
-        // Register ourselves for server and other game events we are interested in.
-        // Note that this is necessary if and only if we want *this* class (ExampleMod) to respond directly to events.
-        // Do not add this line if there are no @SubscribeEvent-annotated functions in this class, like onServerStarting() below.
         NeoForge.EVENT_BUS.register(this);
 
         ModItems.register(modEventBus);
+        ModBlocks.register(modEventBus);
+        ModBlockEntities.register(modEventBus);
+        ModMenuTypes.register(modEventBus);
 
-        // Register the item to a creative tab
+        modEventBus.addListener(this::registerScreens);
         modEventBus.addListener(this::addCreative);
-
-        // Register our mod's ModConfigSpec so that FML can create and load the config file for us
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
 
@@ -52,24 +52,27 @@ public class SimpleCompact
 
     }
 
-    // Add the example block item to the building blocks tab
+    private void registerScreens(RegisterMenuScreensEvent event) {
+        event.register(ModMenuTypes.COMPACT_FURNACE_MENU.get(), CompactFurnaceScreen::new);
+    }
+
     private void addCreative(BuildCreativeModeTabContentsEvent event)
     {
         if(event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
             event.accept(ModItems.COMPACTING_GEM);
         }
+        if (event.getTabKey() == CreativeModeTabs.FUNCTIONAL_BLOCKS) {
+            event.accept(ModBlocks.COMPACT_FURNACE);
+        }
     }
 
-    // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event)
     {
-        // Do something when the server starts
         LOGGER.info("HELLO from server starting");
     }
 
-    // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
-    @EventBusSubscriber(modid = MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+    @EventBusSubscriber(modid = MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModEvents
     {
         @SubscribeEvent
