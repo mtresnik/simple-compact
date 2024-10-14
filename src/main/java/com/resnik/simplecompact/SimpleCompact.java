@@ -1,7 +1,7 @@
 package com.resnik.simplecompact;
 
 import com.resnik.simplecompact.block.ModBlocks;
-import com.resnik.simplecompact.entity.ModBlockEntities;
+import com.resnik.simplecompact.block.entity.ModBlockEntities;
 import com.resnik.simplecompact.inventory.CompactFurnaceScreen;
 import com.resnik.simplecompact.inventory.ModMenuTypes;
 import com.resnik.simplecompact.item.ModItems;

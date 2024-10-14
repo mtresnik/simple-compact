@@ -1,22 +1,19 @@
 package com.resnik.simplecompact.block;
 
 import com.mojang.serialization.MapCodec;
-import com.resnik.simplecompact.entity.CompactFurnaceTileEntity;
+import com.resnik.simplecompact.block.entity.CompactFurnaceTileEntity;
+import com.resnik.simplecompact.block.entity.ModBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.stats.Stats;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityTicker;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.entity.FurnaceBlockEntity;
+import net.minecraft.world.level.block.entity.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -43,7 +40,7 @@ public class CompactFurnaceBlock extends AbstractFurnaceBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
-        return createFurnaceTicker(level, blockEntityType, BlockEntityType.FURNACE);
+        return createCompactFurnaceTicker(level, blockEntityType, ModBlockEntities.COMPACT_FURNACE.get());
     }
 
     @Override
@@ -51,7 +48,6 @@ public class CompactFurnaceBlock extends AbstractFurnaceBlock {
         BlockEntity blockentity = level.getBlockEntity(pos);
         if (blockentity instanceof CompactFurnaceTileEntity) {
             player.openMenu((MenuProvider)blockentity);
-            player.awardStat(Stats.INTERACT_WITH_FURNACE);
         }
     }
 
@@ -77,5 +73,17 @@ public class CompactFurnaceBlock extends AbstractFurnaceBlock {
         }
     }
 
+    @Nullable
+    protected static <T extends BlockEntity> BlockEntityTicker<T> createCompactFurnaceTicker(
+            Level level, BlockEntityType<T> serverType, BlockEntityType<? extends AbstractFurnaceBlockEntity> clientType
+    ) {
+        return level.isClientSide ? null : createTickerHelper(serverType, clientType, CompactFurnaceBlock::serverTick);
+    }
+
+    public static void serverTick(Level level, BlockPos pos, BlockState state, AbstractFurnaceBlockEntity blockEntity) {
+        for (int numTicks = 0; numTicks < 8; numTicks++) {
+            AbstractFurnaceBlockEntity.serverTick(level,pos,state,blockEntity);
+        }
+    }
 
 }

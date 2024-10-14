@@ -1,4 +1,4 @@
-package com.resnik.simplecompact.entity;
+package com.resnik.simplecompact.block.entity;
 
 import com.resnik.simplecompact.inventory.CompactFurnaceMenu;
 import net.minecraft.core.BlockPos;
@@ -24,4 +24,5 @@ public class CompactFurnaceTileEntity extends AbstractFurnaceBlockEntity {
     protected @NotNull AbstractContainerMenu createMenu(int id, Inventory player) {
         return new CompactFurnaceMenu(id, player, this, this.dataAccess);
     }
+
 }

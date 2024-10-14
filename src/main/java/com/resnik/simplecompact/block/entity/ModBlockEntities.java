@@ -1,4 +1,4 @@
-package com.resnik.simplecompact.entity;
+package com.resnik.simplecompact.block.entity;
 
 import com.resnik.simplecompact.SimpleCompact;
 import com.resnik.simplecompact.block.ModBlocks;
